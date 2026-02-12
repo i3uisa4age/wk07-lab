@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Todo List</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+      }
+      .todo-container {
+        margin: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .todo-container h1 {
+        margin-bottom: 2rem;
+        width: fit-content;
+        align-self: center;
+      }
+      .todo-container .add-todo-list {
+        margin-bottom: 2rem;
+      }
+      .todo-container input {
+        height: 30px;
+        width: 250px;
+        padding-left: 0.5rem;
+      }
+      .todo-container button {
+        height: 30px;
+        width: 60px;
+        border-radius: 5px;
+        background-color: rgb(45, 45, 255);
+        color: white;
+      }
+      #todo-list {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+      .todo-container #todo-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+        width: 314px;
+        border: solid 0.5px;
+      }
+      .todo-container #todo-list button {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="todo-container">
+      <h1>My Todo List</h1>
+      <div class="add-todo-list">
+        <input type="text" id="new-todo" placeholder="input your list" />
+        <button id="add-btn">add</button>
+      </div>
+
+      <!-- Todo list (ul/ol) -->
+      <ul id="todo-list"></ul>
+    </div>
+    <script>
+      // 1. Select elements
+      const input = document.querySelector("#new-todo");
+      const addBtn = document.querySelector("#add-btn");
+      const todoList = document.querySelector("#todo-list");
+      // 2. Add event listener on button
+      addBtn.addEventListener("click", () => {
+        const text = input.value.trim();
+        // Validate: not empty
+        if (!text) return;
+        // Create new li
+        const li = document.createElement("li");
+        li.classList.add("todo-item");
+        li.innerHTML = `
+       <span>${text}</span>
+       <button class="delete-btn">✕</button>
+       `;
+        // Add to list
+        todoList.appendChild(li);
+        // Clear input
+        input.value = "";
+        input.focus();
+      });
+      // 3. Event delegation on list
+      todoList.addEventListener("click", (event) => {
+        // Check if delete button clicked
+        if (event.target.classList.contains("delete-btn")) {
+          const li = event.target.parentElement;
+          li.remove();
+        }
+      });
+      // 4. Optional: Mark complete
+      todoList.addEventListener("change", (event) => {
+        if (event.target.type === "checkbox") {
+          const li = event.target.parentElement;
+          li.classList.toggle("completed");
+        }
+      });
+    </script>
+  </body>
+</html>
