@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Registration Form</title>
+    <style>
+      form {
+        width: 400px;
+        margin: 40px auto;
+      }
+
+      input {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 5px;
+      }
+
+      button {
+        width: 419.2px;
+        margin-top: 1rem;
+      }
+
+      input.error {
+        border-color: red;
+        background: #ffe0e0;
+      }
+
+      input.valid {
+        border-color: green;
+        background: #e0ffe0;
+      }
+
+      .error-message {
+        color: red;
+        font-size: small;
+        display: none;
+        margin-bottom: 10px;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center">Register</h1>
+    <p style="color: gray; text-align: center">Create your account</p>
+    <form id="register-form">
+      <p>Fullname</p>
+      <input type="text" name="name" placeholder="Full Name" />
+      <span class="error-message error-name"></span>
+
+      <p>Email</p>
+      <input type="email" name="email" placeholder="Email" />
+      <span class="error-message error-email"></span>
+
+      <p>Password</p>
+      <input type="password" name="password" placeholder="Password" />
+      <span class="error-message error-password"></span>
+
+      <p>Confirm-Password</p>
+      <input
+        type="password"
+        name="confirm-password"
+        placeholder="Confirm Password"
+      />
+      <span class="error-message error-confirm"></span>
+
+      <button type="submit" disabled>Register</button>
+    </form>
+
+    <script>
+      // 1. Select elements
+      const form = document.querySelector("#register-form");
+      const nameInput = form.querySelector('input[name="name"]');
+      const emailInput = form.querySelector('input[name="email"]');
+      const passwordInput = form.querySelector('input[name="password"]');
+      const confirmInput = form.querySelector('input[name="confirm-password"]');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const nameError = form.querySelector(".error-name");
+      const emailError = form.querySelector(".error-email");
+      const passwordError = form.querySelector(".error-password");
+      const confirmError = form.querySelector(".error-confirm");
+      // 2. Validation functions
+      function validateName(value) {
+        return value.trim().length >= 3;
+      }
+      function validateEmail(value) {
+        return value.includes("@") && value.includes(".");
+      }
+      function validatePassword(value) {
+        return value.length >= 8;
+      }
+      function validateConfirmPassword(pwd, confirm) {
+        return pwd === confirm;
+      }
+      // 3. Check if form is valid
+      function isFormValid() {
+        return (
+          validateName(nameInput.value) &&
+          validateEmail(emailInput.value) &&
+          validatePassword(passwordInput.value) &&
+          validateConfirmPassword(passwordInput.value, confirmInput.value)
+        );
+      }
+      // 4. Update UI
+      function updateUI() {
+        // Name validation
+        if (validateName(nameInput.value)) {
+          nameInput.classList.remove("error");
+          nameInput.classList.add("valid");
+          nameError.classList.remove("show");
+        } else {
+          nameInput.classList.add("error");
+          nameInput.classList.remove("valid");
+          nameError.classList.add("show");
+          nameError.textContent = "Name must be at least 3 characters";
+        }
+        // Email validation
+        if (validateEmail(emailInput.value)) {
+          emailInput.classList.remove("error");
+          emailInput.classList.add("valid");
+          emailError.classList.remove("show");
+        } else {
+          emailInput.classList.add("error");
+          emailInput.classList.remove("valid");
+          emailError.classList.add("show");
+          emailError.textContent = "Please enter valid email";
+        }
+        // Password validation
+        if (validatePassword(passwordInput.value)) {
+          passwordInput.classList.remove("error");
+          passwordInput.classList.add("valid");
+          passwordError.classList.remove("show");
+        } else {
+          passwordInput.classList.add("error");
+          passwordInput.classList.remove("valid");
+          passwordError.classList.add("show");
+          passwordError.textContent = "Password must be at least 8 characters";
+        }
+        // Confirm password validation
+        if (validateConfirmPassword(passwordInput.value, confirmInput.value)) {
+          confirmInput.classList.remove("error");
+          confirmInput.classList.add("valid");
+          confirmError.classList.remove("show");
+        } else {
+          confirmInput.classList.add("error");
+          confirmInput.classList.remove("valid");
+          confirmError.classList.add("show");
+          confirmError.textContent = "Passwords do not match";
+        }
+        // Enable/disable submit button
+        submitBtn.disabled = !isFormValid();
+      }
+      // 5. Event listeners on inputs
+      nameInput.addEventListener("input", updateUI);
+      emailInput.addEventListener("input", updateUI);
+      passwordInput.addEventListener("input", updateUI);
+      confirmInput.addEventListener("input", updateUI);
+      // 6. Form submit
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (isFormValid()) {
+          alert("Form submitted successfully!");
+          form.reset();
+          updateUI();
+        }
+      });
+      // 7. Initial state
+      updateUI();
+    </script>
+  </body>
+</html>
